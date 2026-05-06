@@ -1,0 +1,56 @@
+CONTENT BROADCASTING SYSTEM - FRONTEND NOTES
+===========================================
+
+1. PROJECT STRUCTURE
+--------------------
+The project follows a clean, modular architecture using the Next.js App Router:
+- /src/app: Contains all pages and routing logic.
+- /src/components: Divided into /ui (base elements), /shared (layouts), /teacher, /principal, and /public.
+- /src/services: Dedicated service layer for API abstraction.
+- /src/context: Global state management (Auth).
+- /src/hooks: Custom React hooks for business logic.
+- /src/utils: Helper functions and formatting utilities.
+- /src/lib: External library configurations (QueryClient).
+
+2. AUTHENTICATION FLOW
+----------------------
+- Implementation: Custom AuthContext using localStorage for session persistence.
+- Flow: Login -> Store User Session -> Redirect based on Role.
+- Security: Protected routes are handled via AuthContext and redirection in the layout/root page.
+- Service: auth.service.js handles the mock credential verification and session management.
+
+3. ROLE-BASED ROUTING
+---------------------
+- Teacher: Access to /teacher/* (Dashboard, Upload, My Content).
+- Principal: Access to /principal/* (Dashboard, Pending, All Content).
+- Student: Public access to /live/[teacherId].
+- Logic: Handled in DashboardLayout and the root redirector.
+
+4. API INTEGRATION APPROACH
+---------------------------
+- Service Layer: All API calls are encapsulated in services/content.service.js.
+- Mocking: Uses a robust mock system with simulated delays (800ms-1500ms) to mimic real backend behavior.
+- Data Management: TanStack Query (React Query) is used for fetching, caching, and state synchronization.
+- Real-World Readiness: The service layer can be swapped with real Axios/Fetch calls by simply updating the service methods; components remain untouched.
+
+5. STATE MANAGEMENT APPROACH
+----------------------------
+- Auth State: React Context for global user session.
+- UI State: Local useState for form handling and modal toggles.
+- Server State: TanStack Query for caching content lists, approval status, and live broadcast data.
+- Validation: Client-side validation for file types (JPG, PNG, GIF), sizes (<10MB), and scheduling constraints.
+
+6. ASSUMPTIONS & DESIGN DECISIONS
+---------------------------------
+- Dark Mode: Defaulted to dark mode for a premium, professional "Broadcasting Pro" aesthetic.
+- File Handling: Simulating file uploads by converting files to Data URLs in the mock service.
+- Rotation: Implemented a progress-bar based rotation for live content on the public page.
+- Performance: Optimized list rendering with framer-motion animations and efficient state updates.
+- Scalability: Folder structure and component separation allow for easy addition of new features or roles.
+
+7. EDGE CASE HANDLING
+---------------------
+- Loading States: Premium skeleton loaders and spinners for all async actions.
+- Empty States: Descriptive empty states with icons and call-to-actions.
+- Error Handling: Global toast notifications (Sonner) for API errors and validation failures.
+- Responsive: Fully mobile-responsive layout with a mobile-friendly navigation sidebar.
